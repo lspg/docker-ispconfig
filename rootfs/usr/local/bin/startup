@@ -1,0 +1,16 @@
+#!/bin/bash
+screenfetch
+
+rm -Rf /var/run/amavis/*
+rm -Rf /var/run/apache2/*
+rm -Rf /var/run/clamav/*
+rm -Rf /var/run/dovecot/*
+rm -Rf /var/run/exim4/*
+rm -Rf /var/run/fail2ban/*
+rm -Rf /var/run/hhvm/*
+rm -Rf /var/run/mysqld/*
+rm -Rf /var/run/pureftpd/*
+rm -Rf /var/run/sshd/*
+rm -Rf /var/run/*.pid
+
+/usr/local/bin/supervisord -c /etc/supervisor/supervisord.conf

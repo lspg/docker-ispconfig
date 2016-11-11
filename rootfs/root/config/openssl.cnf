@@ -1,0 +1,12 @@
+[ req ]
+prompt                 = no
+distinguished_name     = req_distinguished_name
+
+[ req_distinguished_name ]
+0.organizationName     = {{ SSLCERT_ORGANIZATION }}
+organizationalUnitName = {{ SSLCERT_UNITNAME }}
+emailAddress           = {{ SSLCERT_EMAIL }}
+localityName           = {{ SSLCERT_LOCALITY }}
+stateOrProvinceName    = {{ SSLCERT_STATE }}
+countryName            = {{ SSLCERT_COUNTRY }}
+commonName             = {{ SSLCERT_CN }}

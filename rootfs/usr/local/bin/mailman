@@ -1,0 +1,24 @@
+#!/bin/bash
+if [ ! -z "${FQDN}" ] && [ ! ${FQDN} == "ispconfig.docker" ] && [ ! -z "${MAILMAN_EMAIL}" ] && [ ! -z "${MAILMAN_PWD}" ]; then
+	host ${FQDN} 2>&1 > /dev/null
+	if [ $? -eq 0 ]; then
+	    mkdir -p /var/run/mailman
+	    chmod -R 700 /var/run/mailan
+	    CHKLIST=$(/usr/lib/mailman/bin/list_lists | grep Mailman)
+	    if [ ! "${CHKLIST}" ]; then
+	        echo "Creating default mailman list"
+	        sed -i "s/^\(DEFAULT_EMAIL_HOST\) = .*$/\1 = '${FQDN}'/g" /etc/mailman/mm_cfg.py
+	        sed -i "s/^\(DEFAULT_URL_HOST\) = .*$/\1 = '${FQDN}'/g" /etc/mailman/mm_cfg.py
+	        /usr/lib/mailman/bin/newlist -q mailman ${MAILMAN_EMAIL} ${MAILMAN_PASS}
+	        newaliases
+	    else
+	        supervisorctl start mailman
+	    fi
+	else
+		echo "*** Set ${FQDN} environment variable with a valid hostname to enable Mailman"
+	fi
+else
+	echo "*** Set ${FQDN} environment variable with a valid hostname to enable Mailman"
+	echo "*** Set ${MAILMAN_EMAIL} environment variable with a valid email to enable Mailman"
+	echo "*** Set ${MAILMAN_PWD} environment variable to enable Mailman"
+fi
