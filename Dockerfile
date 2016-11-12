@@ -206,7 +206,8 @@ RUN apt-get -qq update && apt-get -y -qq install ufw
 # --- 19 Install Rainloop
 RUN mkdir -p /usr/share/rainloop && cd /usr/share/rainloop && curl -s http://repository.rainloop.net/installer.php | php
 COPY ./rootfs/etc/apache2/conf-available/rainloop.conf /etc/apache2/conf-available/rainloop.conf
-RUN a2enconf rainloop
+RUN chmod 644 /etc/apache2/conf-available/rainloop.conf && a2enconf rainloop
+RUN chown -R www-data: /usr/share/rainloop && find /usr/share/rainloop/ -type d -exec chmod 0755 {} \; && find /usr/share/rainloop/ -type f -exec chmod 0644 {} \;
 
 # --- 20 Prepare ISPConfig install
 RUN cd /tmp && wget -nv http://www.ispconfig.org/downloads/ISPConfig-3-stable.tar.gz && tar xfz ISPConfig-3-stable.tar.gz && rm ISPConfig-3-stable.tar.gz
