@@ -223,6 +223,6 @@ RUN apt-get autoremove -y && apt-get clean && rm -rf /tmp/*
 
 EXPOSE 20 21 22 53/udp 53/tcp 80 443 953 8080 30000 30001 30002 30003 30004 30005 30006 30007 30008 30009 3306 9001
 
-VOLUME ["/var/sites","/var/www/","/var/mail/","/var/backup/","/var/lib/mysql","/etc/","/usr/local/ispconfig","/var/log/"]
+VOLUME ["/var/sites","/var/www/","/var/mail/","/var/backups/","/var/lib/mysql","/etc/","/usr/local/ispconfig","/var/log/"]
 
 CMD ["/bin/bash", "/usr/local/bin/startup"]
