@@ -3,7 +3,7 @@ if [ $SQL_BACKUP = 1 ]
 then
 MUSER=root
 MPASS=pass
-BACKUP=/var/backup/sql
+BACKUP=/var/backups/sql
 NOW="$(date +"%d-%m-%Y_%H%M")"
 OLD="$(date +"%d-%m-%Y" -d '-7 day')"
 # create directory
