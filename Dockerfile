@@ -26,7 +26,7 @@ MAINTAINER Loïs PUIG <lois.puig@kctus.fr> version: 0.1
 ENV DEBIAN_FRONTEND="noninteractive"
 
 ARG	FQDN="ispconfig.docker"
-ARG	LOCALE="en_US.UTF-8"
+ARG	LOCALE="en_US"
 ARG	TIMEZONE="UTC"
 ARG	MYSQL_ROOT_PWD="password"
 ARG	PHPMYADMIN_PWD="password"
@@ -59,9 +59,12 @@ RUN mv /bin/systemctl /bin/systemctloriginal
 ADD ./rootfs/bin/systemctl /bin/systemctl
 
 # --- 0.3 locales
-RUN apt-get -y -qq update && apt-get -y -qq install locales
-RUN sed -i "s|# \(.*${LOCALE}.*\)|\1|" /etc/locale.gen
-RUN locale-gen && dpkg-reconfigure locales
+#RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+#    && localedef -i ${LOCALE} -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+#ENV LANG ${LOCALE}.utf8
+#RUN apt-get -y -qq update && apt-get -y -qq install locales
+#RUN sed -i "s|# \(.*${LOCALE}.*\)|\1|" /etc/locale.gen
+#RUN locale-gen && dpkg-reconfigure locales
 
 # --- 1 Preliminary
 RUN apt-get -y -qq update && apt-get -y -qq install apt-utils && apt-get -y -qq upgrade
