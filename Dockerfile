@@ -20,7 +20,7 @@
 
 FROM debian:jessie
 
-MAINTAINER Loïs PUIG <lois.puig@kctus.fr> version: 0.3
+MAINTAINER Loïs PUIG <lois.puig@kctus.fr> version: 0.1
 
 # Let the container know that there is no tty
 ENV DEBIAN_FRONTEND="noninteractive"
@@ -41,14 +41,12 @@ ARG	SSLCERT_COUNTRY="US"
 ARG	SUPERVISOR_LOGIN="root"
 ARG	SUPERVISOR_PWD="password"
 
-# --- 0 Bash
+# --- 0.1 Bash
 COPY ./rootfs/root/.bash_aliases /root/.bash_aliases
-RUN echo 'if [ -f ~/.bash_aliases ]; then\n\
-    . ~/.bash_aliases\n\
-fi\n'\ >> /root/.bashrc
-RUN echo "export TERM=xterm" >> /root/.bashrc
+RUN echo '. ~/.bash_aliases' >> /root/.bashrc && \
+	echo "export TERM=xterm" >> /root/.bashrc
 
-# --- 0.1 Supervisor
+# --- 0.2 Supervisor
 ADD ./rootfs/root/config /root/config
 ADD ./rootfs/usr/local/bin /usr/local/bin
 ADD ./rootfs/etc/supervisor /etc/supervisor
@@ -60,7 +58,7 @@ RUN mkdir -p /var/run/sshd /var/log/supervisor /var/run/supervisor
 RUN mv /bin/systemctl /bin/systemctloriginal
 ADD ./rootfs/bin/systemctl /bin/systemctl
 
-# --- 0.2 locales
+# --- 0.3 locales
 RUN apt-get -y -qq update && apt-get -y -qq install locales
 RUN sed -i "s|# \(.*${LOCALE}.*\)|\1|" /etc/locale.gen
 RUN locale-gen && dpkg-reconfigure locales
@@ -220,7 +218,7 @@ RUN sed -i 's/^NameVirtualHost/#NameVirtualHost/g' /etc/apache2/sites-enabled/00
 # CLEANING
 RUN apt-get autoremove -y && apt-get clean && rm -rf /tmp/*
 
-EXPOSE 20 21 22 53/udp 53/tcp 80 443 953 8080 30000 30001 30002 30003 30004 30005 30006 30007 30008 30009 3306 9001
+EXPOSE 20/tcp 21/tcp 22/tcp 53 80/tcp 443/tcp 953/tcp 8080/tcp 3306 9001/tcp
 
 VOLUME ["/var/www/","/var/mail/","/var/backups/","/var/lib/mysql","/etc/","/usr/local/ispconfig","/var/log/"]
 
