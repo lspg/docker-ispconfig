@@ -74,7 +74,9 @@ RUN apt-get -y -qq update && apt-get -y -qq install rsyslog rsyslog-relp logrota
 RUN touch /var/log/cron.log /var/log/auth.log
 
 # --- 2 Install the SSH server
-RUN apt-get -qq update && apt-get -y -qq install ssh openssh-server rsync
+RUN apt-get -qq update && apt-get -y -qq install ssh openssh-server rsync && \
+    mkdir /root/.ssh && touch /root/.ssh/authorized_keys
+RUN sed -i 's/^#AuthorizedKeysFile/AuthorizedKeysFile/g' /etc/ssh/sshd_config
 
 # --- 3 Install a shell text editor
 RUN apt-get -qq update && apt-get -y -qq install nano vim-nox
