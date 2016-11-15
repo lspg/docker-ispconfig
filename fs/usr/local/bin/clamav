@@ -8,5 +8,5 @@ mkdir -p /var/lib/clamav && chown -R clamav:clamav /var/lib/clamav
 #/usr/bin/freshclam --config-file=/etc/clamav/freshclam.conf
 
 # Start clamd
-supervisorctl start freshclam
-supervisorctl start clamd
+supervisorctl start clamav-freshclam
+supervisorctl start clamav-daemon
