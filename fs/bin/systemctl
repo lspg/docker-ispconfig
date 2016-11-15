@@ -1,22 +1,54 @@
 #!/bin/bash
 SVC=${2%.service}
+
+supervisordaemons=(
+    "amavis"
+    "apache2"
+    "bind9"
+    "clamav-daemon"
+    "clamav-freshclam"
+    "cron"
+    "dovecot"
+    "fail2ban"
+    "hhvm"
+    "mailman"
+    "mysql"
+    "php5-fpm"
+    "postfix"
+    "postgrey"
+    "pure-ftpd-mysql"
+    "rsyslog"
+    "spamassassin"
+    "ssh"
+)
+
+STARTCMD="/etc/init.d/${SVC} start"
+STOPCMD="/etc/init.d/${SVC} stop"
+RESTARTCMD="/etc/init.d/${SVC} restart"
+
+if [[ " ${supervisordaemons[@]} " =~ " ${SVC} " ]]; then
+    STARTCMD="/usr/local/bin/supervisorctl -c /etc/supervisor/supervisord.conf start ${SVC}"
+    STOPCMD="/usr/local/bin/supervisorctl -c /etc/supervisor/supervisord.conf stop ${SVC}"
+    RESTARTCMD="/usr/local/bin/supervisorctl -c /etc/supervisor/supervisord.conf restart ${SVC}"
+fi
+
 case "$1" in
-	reload)
-		/etc/init.d/${SVC} reload
-	;;
-	restart)
-		/etc/init.d/${SVC} restart
-	;;
-	status)
-		/etc/init.d/${SVC} status
-	;;
-	start)
-		/etc/init.d/${SVC} start
-	;;
-	stop)
-		/etc/init.d/${SVC} stop
-	;;
-	*)
-		command systemctloriginal "$@"
-	exit 1
+    reload)
+        /etc/init.d/${SVC} reload
+    ;;
+    restart)
+        eval ${RESTARTCMD}
+    ;;
+    status)
+        /etc/init.d/${SVC} status
+    ;;
+    start)
+        eval ${RESTARTCMD}
+    ;;
+    stop)
+        eval ${RESTARTCMD}
+    ;;
+    *)
+        command systemctloriginal "$@"
+    exit 1
 esac
