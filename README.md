@@ -51,3 +51,4 @@ It is strongly recommended that you change the MariaDB and ISPConfig password as
 * Use puppet for software installation
 * Follow Dockerfile guidelines
 * Include Mails setup into README
+* Create Spamassassin & postfix-wrapper supervisor init scripts
